@@ -1,1 +1,21 @@
-/* You can add global styles to this file, and also import other style files */
+/* 💡 CONCEITO ANGULAR: Estilização Global & PrimeIcons */
+@import "primeicons/primeicons.css";
+
+:root {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--p-content-background, #f8fafc);
+  color: var(--p-text-color, #0f172a);
+  min-height: 100vh;
+}
+
+.app-dark-mode body {
+  background-color: var(--p-content-background, #090d16);
+  color: var(--p-text-color, #f8fafc);
+}
+
