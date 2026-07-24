@@ -1,0 +1,109 @@
+<!-- 💡 CONCEITO ANGULAR: Componentização & RxJS Observables -->
+<!-- Player de Música Lo-Fi / Sons Ambientais para acompanhamento nos estudos -->
+
+<p-card class="music-card">
+  <div class="card-header-bar">
+    <div class="header-title-box">
+      <i class="pi pi-headphones header-icon"></i>
+      <h2>Player de Áudio & Lo-Fi de Estudo</h2>
+    </div>
+
+    <!-- Filtro de Categorias -->
+    <p-selectButton 
+      [options]="categoryOptions" 
+      [ngModel]="selectedCategory()" 
+      (ngModelChange)="onCategoryChange($event)"
+      optionLabel="label" 
+      optionValue="value">
+      <ng-template let-item pTemplate="item">
+        <i [class]="item.icon" class="mr-1"></i>
+        <span>{{ item.label }}</span>
+      </ng-template>
+    </p-selectButton>
+  </div>
+
+  <div class="player-content-grid">
+    
+    <!-- Painel de Reprodução Atual -->
+    <div class="now-playing-panel">
+      <div class="vinyl-cover-box">
+        <i class="pi pi-disc vinyl-icon" [class.spinning]="musicService.isPlaying()"></i>
+      </div>
+
+      <div class="track-info">
+        @if (musicService.currentTrack()) {
+          <h3 class="track-title">{{ musicService.currentTrack()?.title }}</h3>
+          <span class="track-artist">{{ musicService.currentTrack()?.artist }}</span>
+          <p-tag [value]="(musicService.currentTrack()?.category || '') | uppercase" severity="info" class="mt-2" />
+        } @else {
+          <h3 class="track-title">Selecione uma faixa</h3>
+          <span class="track-artist">Música ambiente para potencializar seu foco</span>
+        }
+      </div>
+
+      <!-- Controles Principais de Áudio (Ícones Apenas) -->
+      <div class="audio-controls">
+        <button 
+          pButton 
+          type="button" 
+          icon="pi pi-step-backward" 
+          class="p-button-rounded p-button-outlined control-btn"
+          (click)="prev()">
+        </button>
+
+        <button 
+          pButton 
+          type="button" 
+          [icon]="musicService.isPlaying() ? 'pi pi-pause' : 'pi pi-play'" 
+          class="p-button-rounded p-button-lg control-btn play-btn"
+          (click)="togglePlay()">
+        </button>
+
+        <button 
+          pButton 
+          type="button" 
+          icon="pi pi-step-forward" 
+          class="p-button-rounded p-button-outlined control-btn"
+          (click)="next()">
+        </button>
+      </div>
+
+      <!-- Controle de Volume -->
+      <div class="volume-slider-box">
+        <i class="pi pi-volume-down volume-icon"></i>
+        <p-slider 
+          [ngModel]="volumeValue()" 
+          (ngModelChange)="onVolumeChange($event)" 
+          class="volume-slider">
+        </p-slider>
+        <i class="pi pi-volume-up volume-icon"></i>
+      </div>
+    </div>
+
+    <!-- Lista de Faixas Recomendadas -->
+    <div class="playlist-panel">
+      <h4 class="playlist-title">Faixas Recomendadas</h4>
+      
+      <ul class="track-list">
+        <!-- 💡 CONCEITO ANGULAR: Flow Control (@for) -->
+        @for (track of tracks(); track track.id) {
+          <li 
+            class="track-item" 
+            [class.active]="musicService.currentTrack()?.id === track.id"
+            (click)="playTrack(track)">
+            <i 
+              [class]="musicService.currentTrack()?.id === track.id && musicService.isPlaying() ? 'pi pi-spin pi-spinner' : 'pi pi-play-circle'" 
+              class="item-icon">
+            </i>
+            <div class="item-details">
+              <span class="item-title">{{ track.title }}</span>
+              <span class="item-artist">{{ track.artist }}</span>
+            </div>
+            <span class="item-duration">{{ track.durationStr }}</span>
+          </li>
+        }
+      </ul>
+    </div>
+
+  </div>
+</p-card>
