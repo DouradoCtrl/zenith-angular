@@ -1,0 +1,103 @@
+<!-- 💡 CONCEITO ANGULAR: Componentização & @Input/@Output -->
+<!-- O DashboardComponent age como o componente Pai que consome o ContributionGridComponent -->
+
+<div class="dashboard-wrapper">
+  <!-- 💡 CONCEITO ANGULAR: Requisições HTTP & API Externa -->
+  @if (dailyQuote()) {
+    <p-card styleClass="quote-card" [style]="{'margin-bottom': '1.5rem', 'background': 'var(--p-primary-color)', 'color': 'var(--p-primary-contrast-color)'}">
+      <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.5rem;">
+        <i class="pi pi-bolt" style="font-size: 1.5rem; margin-bottom: 0.5rem"></i>
+        <h3 style="margin: 0; font-weight: 500; font-style: italic">"{{ dailyQuote()?.quote }}"</h3>
+        <span style="font-size: 0.9rem; opacity: 0.8">- {{ dailyQuote()?.author }}</span>
+      </div>
+    </p-card>
+  }
+  <!-- Card com Resumo de Estatísticas -->
+  <div class="stats-cards-grid">
+    <p-card class="stat-card">
+      <div class="stat-box">
+        <i class="pi pi-calendar-plus stat-icon"></i>
+        <div class="stat-info">
+          <span class="stat-value">{{ activeDaysCount() }} dias</span>
+          <span class="stat-label">Dias com Estudo Ativo</span>
+        </div>
+      </div>
+    </p-card>
+
+    <p-card class="stat-card">
+      <div class="stat-box">
+        <i class="pi pi-clock stat-icon"></i>
+        <div class="stat-info">
+          <!-- 💡 CONCEITO ANGULAR: Pipes (Shared) -->
+          <span class="stat-value">{{ totalMinutes() | studyHours }}</span>
+          <span class="stat-label">Tempo Total Acumulado</span>
+        </div>
+      </div>
+    </p-card>
+  </div>
+
+  <!-- Card Principal com o Gráfico de Contribuições estilo GitHub -->
+  <p-card class="grid-card">
+    <div class="card-header-bar">
+      <div class="header-title-box">
+        <i class="pi pi-chart-bar header-icon"></i>
+        <h2>Gráfico de Contribuição de Estudos</h2>
+      </div>
+      <p-tag value="Último Ano (365 Dias)" severity="info" />
+    </div>
+
+    <!-- 💡 CONCEITO ANGULAR: @Input e @Output (Comunicação Pai/Filho) -->
+    <!-- [days] envia os dados via @Input(); (daySelect) escuta os cliques via @Output() -->
+    <app-contribution-grid 
+      [days]="studyHistory()" 
+      (daySelect)="onDaySelected($event)">
+    </app-contribution-grid>
+  </p-card>
+
+  <!-- Modal p-dialog para exibir detalhes do dia selecionado -->
+  <p-dialog 
+    header="Detalhes da Sessão de Estudo" 
+    [(visible)]="detailsModalVisible" 
+    [modal]="true" 
+    [style]="{ width: '400px' }"
+    [draggable]="false"
+    [resizable]="false">
+    
+    @if (selectedDay()) {
+      <div class="dialog-details-body">
+        <div class="detail-row">
+          <span class="detail-label">Data:</span>
+          <span class="detail-val">{{ selectedDay()?.date }}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Tempo Estudado:</span>
+          <span class="detail-val highlight">
+            <!-- 💡 CONCEITO ANGULAR: Pipes (Shared) -->
+            {{ selectedDay()?.minutesStudied | studyHours }}
+          </span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Sessões de Pomodoro:</span>
+          <span class="detail-val">{{ selectedDay()?.sessionsCount }} ciclos</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Nível de Intensidade:</span>
+          <p-tag 
+            [value]="'Nível ' + selectedDay()?.level" 
+            [severity]="selectedDay()?.level === 0 ? 'secondary' : 'info'" />
+        </div>
+      </div>
+    }
+
+    <ng-template pTemplate="footer">
+      <p-button 
+        label="Fechar" 
+        icon="pi pi-check" 
+        (click)="closeModal()">
+      </p-button>
+    </ng-template>
+  </p-dialog>
+</div>
