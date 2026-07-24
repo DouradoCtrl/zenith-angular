@@ -1,0 +1,36 @@
+<!-- 💡 CONCEITO ANGULAR: Componentização & Template Binding -->
+<!-- O ShellComponent age como a casca (layout) principal da aplicação, encapsulando o Header/Topbar e o conteúdo -->
+
+<div class="layout-wrapper">
+  <!-- Header Navbar minimalista com componentes PrimeNG e apenas PrimeIcons -->
+  <header class="app-header">
+    <div class="header-left">
+      <i class="pi pi-graduation-cap header-icon"></i>
+      <span class="brand-title">Zenith Study Hub</span>
+    </div>
+
+    <nav class="header-nav">
+      <button pButton type="button" routerLink="/pomodoro" routerLinkActive="p-button-outlined" [routerLinkActiveOptions]="{exact: true}" icon="pi pi-clock" label="Pomodoro" class="p-button-text nav-btn"></button>
+      <button pButton type="button" routerLink="/dashboard" routerLinkActive="p-button-outlined" [routerLinkActiveOptions]="{exact: true}" icon="pi pi-chart-bar" label="Dashboard" class="p-button-text nav-btn"></button>
+      <button pButton type="button" routerLink="/settings" routerLinkActive="p-button-outlined" [routerLinkActiveOptions]="{exact: true}" icon="pi pi-cog" label="Configurações" class="p-button-text nav-btn"></button>
+    </nav>
+
+    <div class="header-right">
+      <!-- 💡 CONCEITO ANGULAR: Template Binding -> Event Binding & Property Binding -->
+      <!-- (click) dispara a alternância de tema; [icon] atualiza dinamicamente o PrimeIcon -->
+      <button 
+        pButton 
+        type="button" 
+        [icon]="themeService.isDarkMode() ? 'pi pi-sun' : 'pi pi-moon'" 
+        [label]="themeService.isDarkMode() ? 'Light' : 'Dark'"
+        class="p-button-outlined p-button-sm theme-toggle-btn"
+        (click)="toggleTheme()">
+      </button>
+    </div>
+  </header>
+
+  <!-- Container principal onde o conteúdo das features será renderizado -->
+  <main class="app-content">
+    <ng-content></ng-content>
+  </main>
+</div>
