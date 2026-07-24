@@ -1,0 +1,123 @@
+<p-toast></p-toast>
+
+<div class="settings-wrapper">
+  
+  <div class="settings-grid">
+    <!-- PARTE A: Template Driven Form -->
+    <p-card styleClass="settings-card">
+      <div class="card-header-bar">
+        <div class="header-title-box">
+          <i class="pi pi-bullseye header-icon"></i>
+          <h3>Metas de Estudo (Template Driven)</h3>
+        </div>
+      </div>
+      
+      <form #goalForm="ngForm" (ngSubmit)="addGoal()">
+        <div class="form-group">
+          <label for="studyGoal">Nova Meta Diária</label>
+          <input 
+            id="studyGoal" 
+            name="studyGoal" 
+            type="text" 
+            pInputText 
+            [(ngModel)]="studyGoal" 
+            required 
+            placeholder="Ex: Estudar Angular Forms por 1h"
+            autocomplete="off">
+        </div>
+        <div class="submit-container">
+          <p-button 
+            type="submit" 
+            label="Adicionar Meta" 
+            icon="pi pi-plus" 
+            [disabled]="goalForm.invalid || !studyGoal.trim()">
+          </p-button>
+        </div>
+      </form>
+    </p-card>
+
+    <!-- PARTE B: Reactive Forms -->
+    <p-card styleClass="settings-card">
+      <div class="card-header-bar">
+        <div class="header-title-box">
+          <i class="pi pi-clock header-icon"></i>
+          <h3>Tempos do Pomodoro (Reactive)</h3>
+        </div>
+      </div>
+      
+      <form [formGroup]="pomodoroForm" (ngSubmit)="savePomodoroSettings()">
+        <!-- Focus Time -->
+        <div class="form-group">
+          <label for="focusTime">Tempo de Foco (min)</label>
+          <p-inputNumber 
+            inputId="focusTime" 
+            formControlName="focusTime" 
+            [min]="1" 
+            [max]="60"
+            [showButtons]="true"
+            buttonLayout="horizontal"
+            spinnerMode="horizontal"
+            decrementButtonClass="p-button-secondary"
+            incrementButtonClass="p-button-secondary"
+            incrementButtonIcon="pi pi-plus"
+            decrementButtonIcon="pi pi-minus">
+          </p-inputNumber>
+          <small class="p-error" *ngIf="pomodoroForm.get('focusTime')?.invalid && pomodoroForm.get('focusTime')?.touched">
+            Requerido (1 a 60 min)
+          </small>
+        </div>
+
+        <!-- Short Break -->
+        <div class="form-group">
+          <label for="shortBreak">Pausa Curta (min)</label>
+          <p-inputNumber 
+            inputId="shortBreak" 
+            formControlName="shortBreak" 
+            [min]="1" 
+            [max]="30"
+            [showButtons]="true"
+            buttonLayout="horizontal"
+            spinnerMode="horizontal"
+            decrementButtonClass="p-button-secondary"
+            incrementButtonClass="p-button-secondary"
+            incrementButtonIcon="pi pi-plus"
+            decrementButtonIcon="pi pi-minus">
+          </p-inputNumber>
+          <small class="p-error" *ngIf="pomodoroForm.get('shortBreak')?.invalid && pomodoroForm.get('shortBreak')?.touched">
+            Requerido (1 a 30 min)
+          </small>
+        </div>
+
+        <!-- Long Break -->
+        <div class="form-group">
+          <label for="longBreak">Pausa Longa (min)</label>
+          <p-inputNumber 
+            inputId="longBreak" 
+            formControlName="longBreak" 
+            [min]="1" 
+            [max]="45"
+            [showButtons]="true"
+            buttonLayout="horizontal"
+            spinnerMode="horizontal"
+            decrementButtonClass="p-button-secondary"
+            incrementButtonClass="p-button-secondary"
+            incrementButtonIcon="pi pi-plus"
+            decrementButtonIcon="pi pi-minus">
+          </p-inputNumber>
+          <small class="p-error" *ngIf="pomodoroForm.get('longBreak')?.invalid && pomodoroForm.get('longBreak')?.touched">
+            Requerido (1 a 45 min)
+          </small>
+        </div>
+
+        <div class="submit-container">
+          <p-button 
+            type="submit" 
+            label="Salvar Configurações" 
+            icon="pi pi-save" 
+            [disabled]="pomodoroForm.invalid">
+          </p-button>
+        </div>
+      </form>
+    </p-card>
+  </div>
+</div>
