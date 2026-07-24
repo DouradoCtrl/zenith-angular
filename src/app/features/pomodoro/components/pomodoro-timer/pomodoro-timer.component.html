@@ -1,0 +1,47 @@
+<!-- 💡 CONCEITO ANGULAR: Componentização & Template Binding -->
+<!-- HTML minimalista demonstrando Interpolação, Property, Event, Class/Style Bindings e Flow Control -->
+
+<div class="pomodoro-container">
+  
+  <!-- Cronômetro (Child Component via @Input / @Output) -->
+  <app-timer-display
+    [formattedTime]="pomodoroService.formattedTime()"
+    [currentMode]="pomodoroService.mode()"
+    [isRunning]="pomodoroService.isRunning()"
+    [accentColor]="accentColor"
+    [progressPercentage]="pomodoroService.progressPercentage()"
+    (toggleTimer)="togglePlayPause()"
+    (nextTimer)="next()"
+    (resetTimer)="reset()">
+  </app-timer-display>
+
+  <!-- Histórico de Sessões Concluídas -->
+  <div class="history-card">
+    <div class="history-header">
+      <i class="pi pi-history history-icon"></i>
+      <h3>Sessões Concluídas</h3>
+    </div>
+
+    <!-- 💡 CONCEITO ANGULAR: Flow Control (@if / @for) -->
+    @if (pomodoroService.sessionsHistory().length > 0) {
+      <ul class="history-list">
+        @for (session of pomodoroService.sessionsHistory(); track session.id) {
+          <li class="history-item">
+            <i class="pi pi-check-circle item-icon"></i>
+            <div class="item-details">
+              <span class="item-title">Sessão de Foco</span>
+              <span class="item-date">{{ session.completedAt | date:'HH:mm:ss' }}</span>
+            </div>
+            <p-tag value="25 min" severity="success" />
+          </li>
+        }
+      </ul>
+    } @else {
+      <div class="empty-history">
+        <i class="pi pi-inbox empty-icon"></i>
+        <p>Nenhuma sessão concluída ainda.</p>
+      </div>
+    }
+  </div>
+
+</div>
