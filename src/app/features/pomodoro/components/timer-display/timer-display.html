@@ -1,0 +1,58 @@
+<p-card 
+  [class.break-card]="currentMode !== 'focus'" 
+  [style.borderColor]="accentColor" 
+  class="pomodoro-card">
+  
+  <!-- Topo: Badge do Estado Atual -->
+  <div class="status-header">
+    @if (currentMode !== 'focus') {
+      <p-tag value="Modo Pausa" severity="success" icon="pi pi-coffee" class="status-tag" />
+    } @else {
+      <p-tag value="Modo Foco" severity="info" icon="pi pi-briefcase" class="status-tag" />
+    }
+  </div>
+
+  <!-- Relógio Digital Central -->
+  <div class="timer-display-box">
+    <h1 class="timer-digits" [style.color]="accentColor">
+      {{ formattedTime }}
+    </h1>
+
+    <p-progressBar 
+      [value]="progressPercentage" 
+      [showValue]="false" 
+      class="progress-bar-custom" />
+  </div>
+
+  <!-- Controles de Ícones Apenas (Play/Pause, Próximo, Resetar) -->
+  <div class="timer-icon-actions">
+    <!-- Botão Play / Pause -->
+    <button 
+      pButton 
+      type="button" 
+      [icon]="isRunning ? 'pi pi-pause' : 'pi pi-play'" 
+      class="p-button-rounded p-button-lg control-btn play-btn"
+      [style.backgroundColor]="accentColor"
+      [style.borderColor]="accentColor"
+      (click)="onToggle()">
+    </button>
+
+    <!-- Botão Próximo -->
+    <button 
+      pButton 
+      type="button" 
+      icon="pi pi-step-forward" 
+      class="p-button-rounded p-button-outlined p-button-lg control-btn"
+      (click)="onNext()">
+    </button>
+
+    <!-- Botão Resetar -->
+    <button 
+      pButton 
+      type="button" 
+      icon="pi pi-refresh" 
+      class="p-button-rounded p-button-outlined p-button-lg control-btn"
+      (click)="onReset()">
+    </button>
+  </div>
+</p-card>
