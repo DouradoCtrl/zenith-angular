@@ -1,0 +1,46 @@
+<!-- 💡 CONCEITO ANGULAR: Componentização & Layout Estilo GitHub -->
+<!-- Renderização do grid no padrão exato do GitHub: 7 linhas (Dom-Sáb), preenchidas em coluna por semana -->
+
+<div class="grid-wrapper">
+  <div class="github-grid-container">
+    
+    <!-- Rótulos dos Dias da Semana na Esquerda -->
+    <div class="weekday-labels">
+      <span class="label-day">Dom</span>
+      <span class="label-day bold">Seg</span>
+      <span class="label-day">Ter</span>
+      <span class="label-day bold">Qua</span>
+      <span class="label-day">Qui</span>
+      <span class="label-day bold">Sex</span>
+      <span class="label-day">Sáb</span>
+    </div>
+
+    <!-- Matriz de Células (7 Linhas x N Semanas em Coluna) -->
+    <div class="grid-matrix">
+      @for (day of days; track day.date) {
+        <button 
+          type="button"
+          class="grid-cell" 
+          [class]="'level-' + day.level"
+          [class.is-placeholder]="day.isPlaceholder"
+          [pTooltip]="day.date + ': ' + (day.minutesStudied | studyHours) + ' (' + day.sessionsCount + ' sessões)'"
+          tooltipPosition="top"
+          (click)="onCellClick(day)">
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Legenda de Cores (Tonalidades de Azul) -->
+  <div class="grid-legend">
+    <span class="legend-text">Menos</span>
+    <div class="legend-cells">
+      <span class="grid-cell level-0"></span>
+      <span class="grid-cell level-1"></span>
+      <span class="grid-cell level-2"></span>
+      <span class="grid-cell level-3"></span>
+      <span class="grid-cell level-4"></span>
+    </div>
+    <span class="legend-text">Mais</span>
+  </div>
+</div>
