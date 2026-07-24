@@ -1,12 +1,20 @@
-import { Component, signal } from '@angular/core';
+// 💡 CONCEITO ANGULAR: Componentização (Componente Raiz App)
+// Componente principal que carrega o ShellComponent e as features Pomodoro, Dashboard e Music.
+
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { ShellComponent } from './core/layout/shell.component';
+import { MusicPlayerComponent } from './features/music/components/music-player/music-player.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [
+    RouterOutlet, 
+    ShellComponent, 
+    MusicPlayerComponent
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
-  protected readonly title = signal('zenith-primeng');
-}
+export class App {}
